@@ -2,9 +2,9 @@ package com.anish.calabashbros;
 
 import java.lang.reflect.Array;
 
-public class BubbleSorter<T extends Comparable<T>> implements Sorter<T> {
+public class SelectSorter<T extends Comparable<T>> implements Sorter<T> {
 
-    private T[] a;
+	private T[] a;
 
     @Override
     public void load(T[] a) {
@@ -29,26 +29,32 @@ public class BubbleSorter<T extends Comparable<T>> implements Sorter<T> {
         a[j] = temp;
         plan += "" + a[i] + "<->" + a[j] + "\n";
     }
+    
+    private int maxIndex(int size) {
+		if(size == 1) return 0;
+		int res = 0;
+		for(int i = 1; i < size; i++) {
+			if(a[i].compareTo(a[res]) > 0)
+				res = i;
+		}
+		return res;
+	}
 
     private String plan = "";
 
     @Override
     public void sort() {
-        boolean sorted = false;
-        while (!sorted) {
-            sorted = true;
-            for (int i = 0; i < a.length - 1; i++) {
-                if (a[i].compareTo(a[i + 1]) > 0) {
-                    swap(i, i + 1);
-                    sorted = false;
-                }
-            }
-        }
+    	int len = a.length;
+		while(len > 1) {
+			int mIndex = maxIndex(len);
+			len--;
+			if(mIndex != len)
+				swap(mIndex, len);
+		}
     }
 
     @Override
     public String getPlan() {
         return this.plan;
     }
-
 }
